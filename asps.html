@@ -1,48 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Download Documents</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Storage</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<h1>Download Documents</h1>
-
-<!-- File input for multiple files selection -->
-<input type="file" id="fileInput" multiple>
-
-<!-- Button to trigger download -->
-<button onclick="downloadFiles()">Download Selected Files</button>
-
-<script>
-function downloadFiles() {
-  // Get the selected files
-  var files = document.getElementById('fileInput').files;
-  
-  // Check if any file is selected
-  if (files.length === 0) {
-    alert('Please select at least one file.');
-    return;
-  }
-  
-  // Create a zip file
-  var zip = new JSZip();
-  
-  // Add each file to the zip
-  for (var i = 0; i < files.length; i++) {
-    var file = files[i];
-    zip.file(file.name, file);
-  }
-  
-  // Generate the zip file
-  zip.generateAsync({type:"blob"}).then(function(content) {
-    // Create a download link
-    var downloadLink = document.createElement('a');
-    downloadLink.href = URL.createObjectURL(content);
-    downloadLink.download = 'documents.zip'; // Name of the zip file
-    downloadLink.click();
-  });
-}
-</script>
+    <header>
+        <h1>Document Storage</h1>
+    </header>
+    <main>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name="file" id="fileInput" accept=".pdf,.doc,.docx,.txt">
+            <button type="submit">Upload</button>
+        </form>
+        <div id="fileList">
+            <!-- File list will be displayed here -->
+        </div>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
