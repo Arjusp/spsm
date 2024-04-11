@@ -3,48 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Multiple Document Upload and Download</title>
+<title>Download Documents</title>
 </head>
 <body>
-  <h1>Upload Documents</h1>
-  <input type="file" id="fileInput" multiple>
-  <button onclick="uploadFiles()">Upload</button>
+<h1>Download Documents</h1>
 
-  <h1>Uploaded Documents</h1>
-  <ul id="fileList"></ul>
+<!-- File input for multiple files selection -->
+<input type="file" id="fileInput" multiple>
 
-  <h1>Download Documents</h1>
-  <button onclick="downloadFiles()">Download All</button>
+<!-- Button to trigger download -->
+<button onclick="downloadFiles()">Download Selected Files</button>
 
-  <script>
-    function uploadFiles() {
-      const fileInput = document.getElementById('fileInput');
-      const fileList = document.getElementById('fileList');
-      
-      while (fileList.firstChild) {
-        fileList.removeChild(fileList.firstChild);
-      }
-
-      for (const file of fileInput.files) {
-        const listItem = document.createElement('li');
-        listItem.textContent = file.name;
-        fileList.appendChild(listItem);
-      }
-    }
-
-    function downloadFiles() {
-      const fileInput = document.getElementById('fileInput');
-      for (const file of fileInput.files) {
-        const url = URL.createObjectURL(file);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = file.name;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      }
-    }
-  </script>
+<script>
+function downloadFiles() {
+  // Get the selected files
+  var files = document.getElementById('fileInput').files;
+  
+  // Check if any file is selected
+  if (files.length === 0) {
+    alert('Please select at least one file.');
+    return;
+  }
+  
+  // Create a zip file
+  var zip = new JSZip();
+  
+  // Add each file to the zip
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+    zip.file(file.name, file);
+  }
+  
+  // Generate the zip file
+  zip.generateAsync({type:"blob"}).then(function(content) {
+    // Create a download link
+    var downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(content);
+    downloadLink.download = 'documents.zip'; // Name of the zip file
+    downloadLink.click();
+  });
+}
+</script>
 </body>
 </html>
