@@ -3,22 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Storage</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Document Upload and Download</title>
 </head>
 <body>
-    <header>
-        <h1>Document Storage</h1>
-    </header>
-    <main>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" name="file" id="fileInput" accept=".pdf,.doc,.docx,.txt">
-            <button type="submit">Upload</button>
-        </form>
-        <div id="fileList">
-            <!-- File list will be displayed here -->
-        </div>
-    </main>
-    <script src="script.js"></script>
+    <h1>Upload and Download Documents</h1>
+    
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="fileInput">
+        <button type="button" onclick="uploadFile()">Upload File</button>
+    </form>
+    
+    <div id="downloadLinks">
+        <!-- Download links will be displayed here -->
+    </div>
+
+    <script>
+        function uploadFile() {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            if (file) {
+                var formData = new FormData();
+                formData.append('file', file);
+
+                // You can send this formData to your server using AJAX to save the file
+                // Example: 
+                // var xhr = new XMLHttpRequest();
+                // xhr.open('POST', 'save_document.php');
+                // xhr.onload = function() {
+                //     if (xhr.status === 200) {
+                //         // File saved successfully
+                //         // You can update UI or show a message here
+                //     } else {
+                //         // Error saving file
+                //         // You can handle errors accordingly
+                //     }
+                // };
+                // xhr.send(formData);
+
+                // For demonstration purposes, let's just display a download link
+                var downloadLinks = document.getElementById('downloadLinks');
+                var downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(file);
+                downloadLink.download = file.name;
+                downloadLink.innerText = file.name;
+                downloadLinks.appendChild(downloadLink);
+            } else {
+                alert('Please select a file to upload.');
+            }
+        }
+    </script>
 </body>
 </html>
+
